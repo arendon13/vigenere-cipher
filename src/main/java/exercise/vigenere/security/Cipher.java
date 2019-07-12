@@ -27,7 +27,7 @@ public class Cipher {
             char textChar = input.charAt(i);
 
             // if a current char in the input is not found in the CipherCharSet, leave as is
-            if ( !numToCharSet.containsValue(textChar) ) {
+            if ( !charSetToNum.containsKey(textChar) ) {
                 sb.append(textChar);
                 continue;
             }
@@ -47,7 +47,7 @@ public class Cipher {
 
                 if (cipheredCharNum == 0) cipheredCharNum = charSetSize; // necessary since our custom mapping begins at index 1
 
-                if(isEncrypting) {
+                if( isEncrypting ) {
                     sourceSetMap.put(x,cipheredCharNum);
                 } else {
                     sourceSetMap.put(cipheredCharNum, x);
@@ -56,6 +56,7 @@ public class Cipher {
             }
 
 
+            //  getting mapping for current text character based off the created sourceSetMap
             int textMap = charSetToNum.get(textChar);
 
             int encryptedCharNum = sourceSetMap.get(textMap);
