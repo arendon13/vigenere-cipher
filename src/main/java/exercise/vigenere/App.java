@@ -43,13 +43,17 @@ public class App {
 
         if ("encrypt".equalsIgnoreCase(action)) {
 
-            String encryption = Cipher.Vigenere(true, target, key, CIPHER_CHAR_SET);
+            Cipher cipher = new Cipher(CIPHER_CHAR_SET);
+
+            String encryption = cipher.Vigenere(true, target, key);
 
             System.out.println(encryption);
 
         } else if ("decrypt".equalsIgnoreCase(action)) {
 
-            String decryption = Cipher.Vigenere(false, target, key, CIPHER_CHAR_SET);
+            Cipher cipher = new Cipher(CIPHER_CHAR_SET);
+
+            String decryption = cipher.Vigenere(false, target, key);
 
             System.out.println(decryption);
 
@@ -62,7 +66,12 @@ public class App {
 
             Walker fileWalker = new Walker(true, key, CIPHER_CHAR_SET);
 
-            fileWalker.walk(src, dest);
+            try {
+                fileWalker.walk(src, dest);
+            } catch (IOException io) {
+                // Ideally would like to log these errors but for the purpose of this exercise, will be using System.err
+                System.err.println("An error occurred while copying files");
+            }
 
         } else if ("decryptDir".equalsIgnoreCase(action)) {
 
@@ -73,7 +82,11 @@ public class App {
 
             Walker fileWalker = new Walker(false, key, CIPHER_CHAR_SET);
 
-            fileWalker.walk(src, dest);
+            try {
+                fileWalker.walk(src, dest);
+            } catch (IOException io) {
+                System.err.println("An error occurred while copying files");
+            }
 
         } else {
             System.out.println("action [" + action + "] not implemented");

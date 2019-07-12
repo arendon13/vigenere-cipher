@@ -16,7 +16,10 @@ public class CipherTest {
 
         String key = "encrypt";
 
-        String encrypted = Cipher.Vigenere(true, text, key, CIPHER_CHAR_SET);
+
+        Cipher cipher = new Cipher(CIPHER_CHAR_SET);
+
+        String encrypted = cipher.Vigenere(true, text, key);
 
 
         String expected = "xbr jcrkig";
@@ -34,7 +37,10 @@ public class CipherTest {
 
         String key = "encrypt";
 
-        String decrypted = Cipher.Vigenere(false, text, key, CIPHER_CHAR_SET);
+
+        Cipher cipher = new Cipher(CIPHER_CHAR_SET);
+
+        String decrypted = cipher.Vigenere(false, text, key);
 
 
         String expected = "top secret";

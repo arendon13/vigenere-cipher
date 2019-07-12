@@ -5,11 +5,15 @@ import java.util.Map;
 
 public class Cipher {
 
-    private Cipher() {
+    private String cipherCharSet;
+
+    public Cipher(String cipherCharSet) {
+
+        this.cipherCharSet = cipherCharSet;
 
     }
 
-    public static String Vigenere(boolean isEncrypting, String input, String key, String cipherCharSet) {
+    public String Vigenere(boolean isEncrypting, String input, String key) {
 
         // Establishing a custom bi-directional mapping of the characters in the CipherCharSet
         Map<Integer,Character> numToCharSet = mapNumToCharSet(cipherCharSet);
@@ -71,7 +75,7 @@ public class Cipher {
 
     }
 
-    private static Map<Integer,Character> mapNumToCharSet(String cipherCharSet) {
+    private Map<Integer,Character> mapNumToCharSet(String cipherCharSet) {
 
         // Incrementing integers are mapped to the chars in the CipherCharSet
         Map<Integer,Character> charSet = new LinkedHashMap<>();
@@ -88,7 +92,7 @@ public class Cipher {
 
     }
 
-    private static Map<Character,Integer> mapCharSetToNum(String cipherCharSet) {
+    private Map<Character,Integer> mapCharSetToNum(String cipherCharSet) {
 
         // CipherCharSet characters are mapped to incrementing integers
         Map<Character,Integer> charSet = new LinkedHashMap<>();

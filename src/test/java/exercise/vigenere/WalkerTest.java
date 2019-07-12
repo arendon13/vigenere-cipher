@@ -3,6 +3,7 @@ package exercise.vigenere;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -111,7 +112,11 @@ public class WalkerTest {
 
         Walker fileWalker = new Walker(isEncrypting, key, cipherCharSet);
 
-        fileWalker.walk(src, dest);
+        try {
+            fileWalker.walk(src, dest);
+        } catch (IOException io) {
+            System.err.println("An error occurred while copying files");
+        }
 
     }
 

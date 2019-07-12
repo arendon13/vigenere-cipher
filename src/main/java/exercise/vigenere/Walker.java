@@ -14,7 +14,9 @@ public class Walker {
 
     private String key, cipherCharSet;
 
-    Walker(boolean isEncrypting, String key, String cipherCharSet) {
+    private Cipher cipher;
+
+    public Walker(boolean isEncrypting, String key, String cipherCharSet) {
 
         this.isEncrypting = isEncrypting;
 
@@ -22,24 +24,27 @@ public class Walker {
 
         this.cipherCharSet = cipherCharSet;
 
+        cipher = new Cipher(this.cipherCharSet);
+
     }
 
-    void walk(File src, File dest) {
+    public void walk(File src, File dest) throws IOException {
 
         // perform checks
         if( src == null || dest == null ) {
-            System.out.println("Valid source or destination paths not given!");
+            // Ideally would like to log these errors but for the purpose of this exercise, will be using System.err
+            System.err.println("Valid source or destination paths not given!");
             return;
         }
 
         if( !src.isDirectory() ) {
-            System.out.println("Source path is not a Directory!");
+            System.err.println("Source path is not a Directory!");
             return;
         }
 
         if(dest.exists()) {
             if( !dest.isDirectory() ){
-                System.out.println("Existing destination path is not a Directory!");
+                System.err.println("Existing destination path is not a Directory!");
                 return;
             }
         } else {
@@ -50,7 +55,7 @@ public class Walker {
         File[] srcFiles = src.listFiles();
 
         if( src.listFiles() == null || srcFiles.length == 0 ) {
-            System.out.println("No files found under the specified source path!");
+            System.err.println("No files found under the specified source path!");
             return;
         }
 
@@ -69,29 +74,23 @@ public class Walker {
                     continue;
                 }
 
+                // copy existing file to new file destination
+                Files.copy(file.toPath(), fileDest.toPath());
+
+
+                // get file content, encrypt/decrypt content, overwrite file contents
+                String content = new String( Files.readAllBytes(Paths.get(fileDest.toPath().toString())), "UTF-8" );
+
+                String cipheredContent = cipher.Vigenere(isEncrypting, content, key);
+
+                FileWriter f = new FileWriter(fileDest.toPath().toString());
+
                 try {
-
-                    // copy existing file to new file destination
-                    Files.copy(file.toPath(), fileDest.toPath());
-
-
-                    // get file content, encrypt/decrypt content, overwrite file contents
-                    String content = new String( Files.readAllBytes(Paths.get(fileDest.toPath().toString())), "UTF-8" );
-
-                    String cipheredContent = Cipher.Vigenere(isEncrypting, content, key, cipherCharSet);
-
-                    FileWriter f = new FileWriter(fileDest.toPath().toString());
-
-                    try {
-                        f.write(cipheredContent);
-                    } catch(Exception e) {
-                        System.out.println("Error occurred while writing to file.");
-                    } finally {
-                        f.close();
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    f.write(cipheredContent);
+                } catch(Exception e) {
+                    System.err.println("Error occurred while writing to file: " + fileDest.toPath().toString());
+                } finally {
+                    f.close();
                 }
 
             }
