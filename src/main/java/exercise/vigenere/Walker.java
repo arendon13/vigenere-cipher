@@ -3,10 +3,11 @@ package exercise.vigenere;
 import exercise.vigenere.security.Cipher;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 public class Walker {
 
@@ -74,23 +75,15 @@ public class Walker {
                     continue;
                 }
 
-                // copy existing file to new file destination
-                Files.copy(file.toPath(), fileDest.toPath());
-
-
-                // get file content, encrypt/decrypt content, overwrite file contents
-                String content = new String( Files.readAllBytes(Paths.get(fileDest.toPath().toString())), "UTF-8" );
-
-                String cipheredContent = cipher.Vigenere(isEncrypting, content, key);
-
-                FileWriter f = new FileWriter(fileDest.toPath().toString());
-
-                try {
-                    f.write(cipheredContent);
-                } catch(Exception e) {
-                    System.err.println("Error occurred while writing to file: " + fileDest.toPath().toString());
-                } finally {
-                    f.close();
+                try (
+                        Stream<String> stream = Files.lines(Paths.get(file.toPath().toString()));
+                        PrintWriter output = new PrintWriter(fileDest)
+                ) {
+                    // encrypt each line and add to new file
+                    stream.forEach( line -> {
+                        String encryptedLine = cipher.Vigenere(isEncrypting, line, key);
+                        output.write( encryptedLine + "\n" );
+                    });
                 }
 
             }

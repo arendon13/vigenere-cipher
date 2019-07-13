@@ -7,10 +7,10 @@ import static org.junit.Assert.assertEquals;
 
 public class CipherTest {
 
+    public static final String CIPHER_CHAR_SET = "abcdefghijklmnopqrstuvwxyz";
+
     @Test
     public void testEncrypt() {
-
-        final String CIPHER_CHAR_SET = "abcdefghijklmnopqrstuvwxyz";
 
         String text = "top secret";
 
@@ -30,8 +30,6 @@ public class CipherTest {
 
     @Test
     public void testDecrypt() {
-
-        final String CIPHER_CHAR_SET = "abcdefghijklmnopqrstuvwxyz";
 
         String text = "xbr jcrkig";
 

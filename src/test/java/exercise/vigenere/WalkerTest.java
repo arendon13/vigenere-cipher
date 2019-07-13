@@ -11,11 +11,11 @@ import static junit.framework.TestCase.assertTrue;
 
 public class WalkerTest {
 
+    public static final String CIPHER_CHAR_SET = "abcdefghijklmnopqrstuvwxyz";
+
 
     @Test
     public void testEncryptWalk() {
-
-        final String CIPHER_CHAR_SET = "abcdefghijklmnopqrstuvwxyz";
 
         String key = "encrypt";
 
@@ -59,8 +59,6 @@ public class WalkerTest {
     @Test
     public void testDecryptWalk() {
 
-        final String CIPHER_CHAR_SET = "abcdefghijklmnopqrstuvwxyz";
-
         String key = "encrypt";
 
 
@@ -93,6 +91,8 @@ public class WalkerTest {
             String originalContent = new String( Files.readAllBytes(Paths.get(original.toPath().toString())), "UTF-8" );
 
             String decryptedContent = new String( Files.readAllBytes(Paths.get(decrypted.toPath().toString())), "UTF-8" );
+
+            decryptedContent = decryptedContent.substring(0, decryptedContent.length() - 1);
 
             assertTrue(decryptedContent.equals(originalContent));
 
